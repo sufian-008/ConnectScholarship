@@ -9,10 +9,10 @@ const { protect } = require('../middleware/auth');
 // access  Public
 router.get('/', async (req, res) => {
   try {
-    const { opportunity, country, fundingType } = req.query;
-    
+    const { opportunity, country, fundingType, page = 1, limit = 10 } = req.query;
+
     let query = { status: 'approved' };
-    
+
     if (opportunity) {
       query.opportunity = { $regex: opportunity, $options: 'i' };
     }
@@ -23,14 +23,28 @@ router.get('/', async (req, res) => {
       query.fundingType = fundingType;
     }
 
+    // Pagination calculation
+    const pageNumber = parseInt(page, 10);
+    const pageSize = parseInt(limit, 10);
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Get total number of approved posts
+    const total = await Post.countDocuments(query);
+
+    // Fetch posts with pagination
     const posts = await Post.find(query)
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(pageSize)
       .populate('author', 'name email');
 
     res.json({
       success: true,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(total / pageSize),
+      totalPosts: total,
       count: posts.length,
-      data: posts
+      data: posts,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -189,3 +203,4 @@ router.put('/:id/request-update', protect, async (req, res) => {
 
 
 module.exports = router;
+
