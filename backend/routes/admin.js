@@ -119,6 +119,29 @@ router.delete('/posts/:id', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+// PUT /admin/posts/:id/approve-update
+router.put('/:id/approve-update', async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post || !post.updateRequest) return res.status(404).json({ message: 'No update request' });
 
+  post.title = post.updateRequest.title;
+  post.content = post.updateRequest.content;
+  post.updateRequest = undefined; // clear the request
+  await post.save();
+
+  res.json({ message: 'Update approved' });
+});
+
+// PUT /admin/posts/:id/reject-update
+router.put('/:id/reject-update', async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post || !post.updateRequest) return res.status(404).json({ message: 'No update request' });
+
+  post.updateRequest = undefined; // clear the request
+  await post.save();
+
+  res.json({ message: 'Update rejected' });
+});
 
 module.exports = router;
+
