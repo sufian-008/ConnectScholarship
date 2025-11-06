@@ -1,4 +1,3 @@
-// Commit 2: Add state variables and imports
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 
@@ -14,9 +13,44 @@ const Home = () => {
   const [countries, setCountries] = useState([]);
   const [opportunities, setOpportunities] = useState([]);
 
+  useEffect(() => {
+    fetchFiltersData();
+    fetchPosts();
+  }, []);
+
+  const fetchFiltersData = async () => {
+    try {
+      const [countryRes, opportunityRes] = await Promise.all([
+        api.get('/filters/countries'),
+        api.get('/filters/opportunities')
+      ]);
+      setCountries(countryRes.data.data);
+      setOpportunities(opportunityRes.data.data);
+    } catch (error) {
+      console.error('Failed to fetch filter data:', error);
+    }
+  };
+
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (filters.opportunity) params.append('opportunity', filters.opportunity);
+      if (filters.country) params.append('country', filters.country);
+      if (filters.fundingType) params.append('fundingType', filters.fundingType);
+
+      const res = await api.get(`/posts?${params.toString()}`);
+      setPosts(res.data.data);
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-      Home Component with state
+      API logic added
     </div>
   );
 };
