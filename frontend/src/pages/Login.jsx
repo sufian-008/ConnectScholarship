@@ -13,9 +13,24 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const user = await login(formData.email, formData.password);
+      navigate(user.role === 'admin' ? '/admin' : '/my-account');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-      Login Form Setup
+      Login logic added
     </div>
   );
 };
