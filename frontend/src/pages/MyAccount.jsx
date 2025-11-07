@@ -12,6 +12,24 @@ const MyAccount = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    fetchMyPosts();
+  }, []);
+
+  const fetchMyPosts = async () => {
+    try {
+      const res = await api.get('/posts/my-posts');
+      setPosts(res.data.data);
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+      toast.error('Failed to fetch posts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div className="text-center py-16">Loading...</div>;
+
   return <div>My Account</div>;
 };
 
