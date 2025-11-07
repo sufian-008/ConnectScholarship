@@ -16,3 +16,34 @@ const CreatePost = () => {
     officialLink: '',
     description: ''
   });
+
+    useEffect(() => {
+    if (id) {
+      fetchPost();
+    }
+  }, [id]);
+
+  const fetchPost = async () => {
+    try {
+      const res = await api.get(`/posts/my-posts`);
+      const post = res.data.data.find(p => p._id === id);
+      
+      if (post && post.status === 'pending') {
+        setFormData({
+          opportunity: post.opportunity,
+          country: post.country,
+          fundingType: post.fundingType,
+          deadline: post.deadline.split('T')[0],
+          officialLink: post.officialLink || '',
+          description: post.description || ''
+        });
+      } else {
+        navigate('/my-account');
+      }
+    } catch (error) {
+      console.error('Failed to fetch post:', error);
+      navigate('/my-account');
+    }
+  };
+
+
