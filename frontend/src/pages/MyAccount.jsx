@@ -96,5 +96,21 @@ const MyAccount = () => {
         </div>
       )}
 
+            {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">My Account</h1>
+          <p className="text-gray-400">Welcome back, {user.name}</p>
+        </div>
+        <Link
+          to="/create-post"
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition flex items-center gap-2 font-semibold"
+        >
+          <Plus size={20} /> Create Post
+        </Link>
+      </div>
+
+
 export default MyAccount;
+
 
