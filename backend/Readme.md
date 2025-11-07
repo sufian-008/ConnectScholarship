@@ -24,7 +24,7 @@ A RESTful API for managing scholarship opportunities, posts, and user authentica
 | POST   | /posts                    | Private | Create a new post                                                                |
 | PUT    | /posts/:id                | Private | Update a post by ID                                                              |
 | DELETE | /posts/:id                | Private | Delete a post by ID                                                              |
-                                                                                  |
+                                                                             
                                                                                   
 
 # 3.Admin Routes (/api/admin) 
@@ -35,7 +35,7 @@ A RESTful API for managing scholarship opportunities, posts, and user authentica
 | PUT    | /admin/posts/:id/approve  | Approve a post                                                 |
 | PUT    | /admin/posts/:id/reject   | Reject a post                                                  |
 | DELETE | /admin/posts/:id          | Delete any post                                                |
-                               |
+                              
 
 # 4. Subscriber Routes (/api/subscribe) 
 | **Method** | **Endpoint**     | **Access**                    | **Description**                        |
