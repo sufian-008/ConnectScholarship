@@ -46,4 +46,25 @@ const CreatePost = () => {
     }
   };
 
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      if (id) {
+        await api.put(`/posts/${id}`, formData);
+      } else {
+        await api.post('/posts', formData);
+      }
+      navigate('/my-account');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to save post');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
 
