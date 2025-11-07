@@ -117,9 +117,67 @@ const MyAccount = () => {
         <StatCard icon={<XCircle />} label="Rejected" value={stats.rejected} color="red" />
       </div>
 
+      {/* Posts */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">My Posts</h2>
+        {posts.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-6">
+            {posts.map(post => (
+              <div
+                key={post._id}
+                className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:bg-gray-800 transition"
+              >
+                <h3 className="text-xl font-semibold mb-2">{post.opportunity}</h3>
+                <p className="text-gray-400 mb-4 line-clamp-3">{post.description}</p>
+                <div className="flex justify-between items-center text-sm text-gray-400 mb-3">
+                  <span>
+                    Status:{' '}
+                    <span
+                      className={`font-semibold ${
+                        post.status === 'approved'
+                          ? 'text-green-400'
+                          : post.status === 'rejected'
+                          ? 'text-red-400'
+                          : 'text-yellow-400'
+                      }`}
+                    >
+                      {post.status}
+                    </span>
+                  </span>
+                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={() => handleEdit(post._id)}
+                    className="flex items-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition text-white text-sm"
+                  >
+                    <Edit2 size={16} /> Edit
+                  </button>
+                  <button
+                    onClick={() => confirmDelete(post._id)}
+                    className="flex items-center gap-1 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition text-white text-sm"
+                  >
+                    <Trash2 size={16} /> Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 text-gray-400">
+            <FileText size={64} className="mx-auto mb-4 opacity-50" />
+            <p className="text-xl mb-4">No posts yet</p>
+            <p>Create your first opportunity post to get started</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 
 export default MyAccount;
+
 
 
 
