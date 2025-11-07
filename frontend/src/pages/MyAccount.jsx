@@ -110,7 +110,16 @@ const MyAccount = () => {
         </Link>
       </div>
 
+            {/* Stats */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <StatCard icon={<Clock />} label="Pending" value={stats.pending} color="yellow" />
+        <StatCard icon={<CheckCircle />} label="Approved" value={stats.approved} color="green" />
+        <StatCard icon={<XCircle />} label="Rejected" value={stats.rejected} color="red" />
+      </div>
+
+
 
 export default MyAccount;
+
 
 
