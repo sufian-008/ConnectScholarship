@@ -110,10 +110,59 @@ const AdminDashboard = () => {
       </div>
 
       {/* Filters */}
-      
-     </div>
+      <div className="flex gap-4">
+        {['all', 'pending', 'approved', 'rejected'].map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-4 py-2 rounded-lg transition ${
+              filter === f
+                ? f === 'pending'
+                  ? 'bg-yellow-600'
+                  : f === 'approved'
+                  ? 'bg-green-600'
+                  : f === 'rejected'
+                  ? 'bg-red-600'
+                  : 'bg-gray-600'
+                : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            {f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Posts List */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">
+          {filter === 'all'
+            ? 'All Posts'
+            : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Posts`}{" "}
+          ({filteredPosts.length})
+        </h2>
+
+        {filteredPosts.length === 0 && (
+          <div className="text-center py-16 text-gray-400">
+            <FileText size={64} className="mx-auto mb-4 opacity-50" />
+            <p className="text-xl">No posts in this category</p>
+          </div>
+        )}
+
+        {filteredPosts.map(post => (
+          <PostCard
+            key={post._id}
+            post={post}
+            showAdminActions
+            onApprove={handleApprove}
+            onReject={handleReject}
+            onDelete={handleDelete}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
 export default AdminDashboard;
 "
+
