@@ -12,7 +12,7 @@ const MyAccount = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-    // State for delete modal
+  // State for delete modal
   const [deleteModal, setDeleteModal] = useState({ open: false, postId: null });
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const MyAccount = () => {
     }
   };
 
-    // Open delete confirmation modal
+  // Open delete confirmation modal
   const confirmDelete = (id) => {
     setDeleteModal({ open: true, postId: id });
   };
@@ -66,10 +66,9 @@ const MyAccount = () => {
     rejected: posts.filter(p => p.status === 'rejected').length
   };
 
-
   if (loading) return <div className="text-center py-16">Loading...</div>;
 
-   return (
+  return (
     <div className="space-y-8 relative">
       <Toaster position="top-right" />
      
@@ -96,7 +95,7 @@ const MyAccount = () => {
         </div>
       )}
 
-            {/* Header */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">My Account</h1>
@@ -110,7 +109,7 @@ const MyAccount = () => {
         </Link>
       </div>
 
-            {/* Stats */}
+      {/* Stats */}
       <div className="grid md:grid-cols-3 gap-6">
         <StatCard icon={<Clock />} label="Pending" value={stats.pending} color="yellow" />
         <StatCard icon={<CheckCircle />} label="Approved" value={stats.approved} color="green" />
@@ -175,9 +174,4 @@ const MyAccount = () => {
   );
 };
 
-
-export default MyAccount;
-
-
-
-
+export default MyAccount;
