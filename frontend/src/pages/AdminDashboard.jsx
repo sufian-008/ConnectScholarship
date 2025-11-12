@@ -1,9 +1,9 @@
-"import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Clock, CheckCircle, XCircle } from 'lucide-react';
 import api from '../api/axios';
 import PostCard from '../components/PostCard';
 import StatCard from '../components/StatCard';
-import toast, { Toaster } from 'react-hot-toast'; // import toast
+import toast, { Toaster } from 'react-hot-toast'; 
 
 const AdminDashboard = () => {
   const [posts, setPosts] = useState([]);
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
         <StatCard icon={<XCircle />} label="Rejected" value={stats.rejected} color="red" />
       </div>
 
-      {/* Filters */}
+   // filter
       <div className="flex gap-4">
         {['all', 'pending', 'approved', 'rejected'].map(f => (
           <button
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* Posts List */}
+     //Post
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           {filter === 'all'
@@ -164,5 +164,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-"
-
