@@ -1,17 +1,34 @@
 import React, { useState } from 'react';
 import { Check } from 'lucide-react';
+import axios from 'axios'; // axios import করো
 
 const Subscribe = () => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubscribed(true);
-    setTimeout(() => {
-      setSubscribed(false);
-      setEmail('');
-    }, 3000);
+    setError('');
+
+    try {
+      // Backend API call
+      const res = await axios.post('http://localhost:5000/api/subscribe', { email });
+
+      if (res.status === 201) {
+        setSubscribed(true);
+        setTimeout(() => {
+          setSubscribed(false);
+          setEmail('');
+        }, 3000);
+      }
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
+    }
   };
 
   return (
@@ -21,14 +38,14 @@ const Subscribe = () => {
         <p className="text-gray-400 text-lg mb-8">
           Subscribe to receive notifications about new opportunities matching your interests
         </p>
-        
+
         {subscribed ? (
           <div className="flex items-center justify-center gap-2 text-green-400 text-lg">
             <Check size={24} />
             <span>Successfully subscribed!</span>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
             <input
               type="email"
               required
@@ -45,6 +62,8 @@ const Subscribe = () => {
             </button>
           </form>
         )}
+
+        {error && <p className="text-red-400 mt-4">{error}</p>}
       </div>
     </div>
   );
