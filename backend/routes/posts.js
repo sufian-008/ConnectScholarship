@@ -4,9 +4,9 @@ const { body, validationResult } = require('express-validator');
 const Post = require('../models/Post');
 const { protect } = require('../middleware/auth');
 
-// route   GET /api/posts
-//     Get all approved posts
-// access  Public
+// @route   GET /api/posts
+// @desc    Get all approved posts
+// @access  Public
 router.get('/', async (req, res) => {
   try {
     const { opportunity, country, fundingType, page = 1, limit = 10 } = req.query;
@@ -51,9 +51,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-// route   GET /api/posts/my-posts
-//   Get current user's posts
-// access  Private
+// @route   GET /api/posts/my-posts
+// @desc    Get current user's posts
+// @access  Private
 router.get('/my-posts', protect, async (req, res) => {
   try {
     const posts = await Post.find({ author: req.user.id })
@@ -69,8 +69,9 @@ router.get('/my-posts', protect, async (req, res) => {
   }
 });
 
-// route   POST /api/posts
-// access  Private
+// @route   POST /api/posts
+// @desc    Create a post
+// @access  Private
 router.post('/', [
   protect,
   body('opportunity').notEmpty().withMessage('Opportunity title is required'),
@@ -102,9 +103,9 @@ router.post('/', [
   }
 });
 
-// route   PUT /api/posts/:id
-//   Update a post
-// access  Private
+// @route   PUT /api/posts/:id
+// @desc    Update a post
+// @access  Private
 router.put('/:id', protect, async (req, res) => {
   try {
     let post = await Post.findById(req.params.id);
@@ -113,15 +114,15 @@ router.put('/:id', protect, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Post not found' });
     }
 
-    // // Check ownership
-    // if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
-    //   return res.status(403).json({ success: false, message: 'Not authorized' });
-    // }
+    // Check ownership
+    if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
 
-    // // Can only edit if pending
-    // if (post.status !== 'reject' && req.user.role !== 'admin') {
-    //   return res.status(400).json({ success: false, message: 'Cannot edit approved/rejected posts' });
-    // }
+    // Can only edit if pending
+    if (post.status !== 'pending' && req.user.role !== 'admin') {
+      return res.status(400).json({ success: false, message: 'Cannot edit approved/rejected posts' });
+    }
 
     post = await Post.findByIdAndUpdate(
       req.params.id,
@@ -138,9 +139,9 @@ router.put('/:id', protect, async (req, res) => {
   }
 });
 
-// route   DELETE /api/posts/:id
-//   Delete a post
-// access  Private
+// @route   DELETE /api/posts/:id
+// @desc    Delete a post
+// @access  Private
 router.delete('/:id', protect, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -170,8 +171,8 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 // @route   PUT /api/posts/:id/request-update
-//   User submits an update request for their post
-// access  Private
+// @desc    User submits an update request for their post
+// @access  Private
 router.put('/:id/request-update', protect, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -203,4 +204,3 @@ router.put('/:id/request-update', protect, async (req, res) => {
 
 
 module.exports = router;
-
