@@ -40,7 +40,7 @@ const MyAccount = () => {
   const handleConfirmDelete = async () => {
     const id = deleteModal.postId;
     try {
-      await api.delete(/posts/${id});
+      await api.delete(`/posts/${id}`);
       setPosts(posts.filter(p => p._id !== id));
       toast.success('Post deleted successfully!');
     } catch (error) {
@@ -57,7 +57,7 @@ const MyAccount = () => {
 
   // Edit post
   const handleEdit = (id) => {
-    navigate(/edit-post/${id});
+    navigate(`/edit-post/${id}`);
   };
 
   const stats = {
@@ -174,4 +174,4 @@ const MyAccount = () => {
   );
 };
 
-export default MyAccount;
+export default MyAccount;
