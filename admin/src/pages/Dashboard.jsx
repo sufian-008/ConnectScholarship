@@ -28,3 +28,31 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+  // Mock data for charts
+  const activityData = [
+    { name: 'Mon', posts: 12 },
+    { name: 'Tue', posts: 19 },
+    { name: 'Wed', posts: 8 },
+    { name: 'Thu', posts: 15 },
+    { name: 'Fri', posts: 22 },
+    { name: 'Sat', posts: 10 },
+    { name: 'Sun', posts: 14 },
+  ];
+
+  const statusData = [
+    { name: 'Approved', value: stats.approved },
+    { name: 'Pending', value: stats.pending },
+    { name: 'Rejected', value: stats.rejected },
+  ];
+
+  if (loading) {
+    return <div className="text-white text-center py-16">Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-white mb-2">Dashboard Overview</h1>
+        <p className="text-gray-400">Monitor your platform's performance and activity</p>
+      </div>
+
