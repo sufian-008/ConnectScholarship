@@ -55,4 +55,40 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-white mb-2">Dashboard Overview</h1>
         <p className="text-gray-400">Monitor your platform's performance and activity</p>
       </div>
+{/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard 
+          icon={FileText} 
+          label="Total Posts" 
+          value={stats.total} 
+          change={12} 
+          trend="up"
+          color="purple" 
+        />
+        <StatCard 
+          icon={Clock} 
+          label="Pending Review" 
+          value={stats.pending} 
+          change={8} 
+          trend="up"
+          color="yellow" 
+        />
+        <StatCard 
+          icon={CheckCircle} 
+          label="Approved" 
+          value={stats.approved} 
+          change={15} 
+          trend="up"
+          color="green" 
+        />
+        <StatCard 
+          icon={XCircle} 
+          label="Rejected" 
+          value={stats.rejected} 
+          change={3} 
+          trend="down"
+          color="red" 
+        />
+      </div>
+
 
