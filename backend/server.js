@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db.js');
+const filterRoutes = require("./routes/filterRoutes");
 
 // Load env vars
 dotenv.config();
@@ -22,6 +23,7 @@ app.use('/api/posts', require('./routes/posts'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/subscribe', require('./routes/subscription'));
 app.use('/api/chatbot', require('./routes/chatbot'));
+app.use("/api/filters", filterRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
