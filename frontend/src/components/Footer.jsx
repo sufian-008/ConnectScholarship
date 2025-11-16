@@ -91,7 +91,7 @@ const Footer = () => {
 
         {/* Divider */}
         <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Brain Station 23. All rights reserved.
+          © {new Date().getFullYear()} Brain Station 23 PLC. All rights reserved.
         </div>
       </div>
     </footer>
@@ -99,4 +99,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

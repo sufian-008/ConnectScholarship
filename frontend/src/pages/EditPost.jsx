@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import api from '../api/axios';
 
-const CreatePost = () => {
-  const { id } = useParams();
+const EditPost = () => {
+  const { id } = useParams(); // post id from URL
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [postStatus, setPostStatus] = useState(''); // track status
   const [formData, setFormData] = useState({
     opportunity: '',
     country: '',
@@ -19,6 +19,7 @@ const CreatePost = () => {
     description: ''
   });
 
+  // Fetch post data
   useEffect(() => {
     if (id) fetchPost();
   }, [id]);
@@ -27,66 +28,52 @@ const CreatePost = () => {
     try {
       const res = await api.get(`/posts/my-posts`);
       const post = res.data.data.find(p => p._id === id);
-      if (post && post.status === 'pending') {
-        setFormData({
-          opportunity: post.opportunity,
-          country: post.country,
-          fundingType: post.fundingType,
-          deadline: post.deadline.split('T')[0],
-          officialLink: post.officialLink || '',
-          description: post.description || ''
-        });
-      } else {
+
+      if (!post) {
         navigate('/my-account');
+        return;
       }
-    } catch (error) {
-      console.error('Failed to fetch post:', error);
+
+      setPostStatus(post.status);
+
+      setFormData({
+        opportunity: post.opportunity,
+        country: post.country,
+        fundingType: post.fundingType,
+        deadline: post.deadline.split('T')[0],
+        officialLink: post.officialLink || '',
+        description: post.description || ''
+      });
+    } catch (err) {
+      console.error(err);
       navigate('/my-account');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
+    setError('');
+
     try {
-      if (id) {
+      if (postStatus === 'pending') {
         await api.put(`/posts/${id}`, formData);
       } else {
-        await api.post('/posts', formData);
+        await api.put(`/posts/${id}`, formData);
       }
+
       navigate('/my-account');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save post');
+      setError(err.response?.data?.message || 'Failed to update post');
     } finally {
       setLoading(false);
     }
   };
 
-  
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ color: [] }, { background: [] }],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'blockquote', 'code-block'],
-      ['clean']
-    ],
-  };
-
-  const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'color', 'background', 'list', 'bullet',
-    'link', 'blockquote', 'code-block'
-  ];
-
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto mt-8">
       <div className="bg-gray-800/50 backdrop-blur rounded-2xl p-8 border border-gray-700">
-        <h1 className="text-3xl font-bold mb-6">
-          {id ? 'Edit Post' : 'Create New Opportunity'}
-        </h1>
+        <h1 className="text-3xl font-bold mb-6">Edit Post</h1>
 
         {error && (
           <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
@@ -95,6 +82,7 @@ const CreatePost = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Opportunity Title */}
           <div>
             <label className="block text-sm mb-2 font-semibold">Opportunity Title *</label>
             <input
@@ -107,6 +95,7 @@ const CreatePost = () => {
             />
           </div>
 
+          {/* Country & Funding Type */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm mb-2 font-semibold">Country *</label>
@@ -136,6 +125,7 @@ const CreatePost = () => {
             </div>
           </div>
 
+          {/* Deadline & Official Link */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm mb-2 font-semibold">Deadline *</label>
@@ -160,26 +150,26 @@ const CreatePost = () => {
             </div>
           </div>
 
-          {/*  React Quill Editor instead of Textarea */}
+          {/* Description */}
           <div>
             <label className="block text-sm mb-2 font-semibold">Description</label>
-            <ReactQuill
-              theme="snow"
-              modules={modules}
-              formats={formats}
+            <textarea
               value={formData.description}
-              onChange={(value) => setFormData({ ...formData, description: value })}
-              className="bg-gray-900/50 text-white rounded-lg border border-gray-600"
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows="5"
+              placeholder="Provide details about the opportunity..."
+              className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none text-white"
             />
           </div>
 
+          {/* Buttons */}
           <div className="flex gap-4">
             <button
               type="submit"
               disabled={loading}
               className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded-lg transition font-semibold"
             >
-              {loading ? 'Saving...' : (id ? 'Update Post' : 'Submit for Review')}
+              {loading ? 'Updating...' : postStatus === 'pending' ? 'Update Post' : 'Submit Update Request'}
             </button>
             <button
               type="button"
@@ -191,15 +181,15 @@ const CreatePost = () => {
           </div>
         </form>
 
-        <div className="mt-6 p-4 bg-blue-900/20 rounded-lg border border-blue-800/30 text-sm">
-          <p className="flex items-center gap-2 text-blue-300">
-            <AlertCircle size={16} />
-            Your post will be reviewed by admins before being published
-          </p>
+        <div className="mt-6 p-4 bg-blue-900/20 rounded-lg border border-blue-800/30 text-sm flex items-center gap-2 text-blue-300">
+          <AlertCircle size={16} />
+          {postStatus === 'pending'
+            ? 'You are editing a pending post. Changes will be saved directly.'
+            : 'Your update request will be reviewed by admins before being published.'}
         </div>
       </div>
     </div>
   );
 };
 
-export default CreatePost;
+export default EditPost;

@@ -150,15 +150,15 @@ router.delete('/:id', protect, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Post not found' });
     }
 
-    // // Check ownership
-    // if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
-    //   return res.status(403).json({ success: false, message: 'Not authorized' });
-    // }
+    // Check ownership
+    if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
 
-    // // Can only delete if pending
-    // if (post.status !== 'pending' && req.user.role !== 'admin') {
-    //   return res.status(400).json({ success: false, message: 'Cannot delete approved/rejected posts' });
-    // }
+    // Can only delete if pending
+    if (post.status !== 'pending' && req.user.role !== 'admin') {
+      return res.status(400).json({ success: false, message: 'Cannot delete approved/rejected posts' });
+    }
 
     await post.deleteOne();
 
@@ -179,14 +179,14 @@ router.put('/:id/request-update', protect, async (req, res) => {
     if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
 
     // Only allow if post is approved/rejected (cannot edit pending directly)
-    // if (post.status === 'pending') {
-    //   return res.status(400).json({ success: false, message: 'You can edit pending posts directly' });
-    // }
+    if (post.status === 'pending') {
+      return res.status(400).json({ success: false, message: 'You can edit pending posts directly' });
+    }
 
-    // // Check ownership
-    // if (post.author.toString() !== req.user.id) {
-    //   return res.status(403).json({ success: false, message: 'Not authorized' });
-    // }
+    // Check ownership
+    if (post.author.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
 
     post.updateRequest = {
       ...req.body,

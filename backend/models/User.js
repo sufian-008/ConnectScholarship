@@ -34,8 +34,8 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-
-UserSchema.pre('save', async function(next) {  // saved in hash form
+// Encrypt password before saving
+UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     next();
   }

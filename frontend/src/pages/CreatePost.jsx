@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import api from '../api/axios';
 
 const CreatePost = () => {
@@ -17,17 +19,14 @@ const CreatePost = () => {
     description: ''
   });
 
-    useEffect(() => {
-    if (id) {
-      fetchPost();
-    }
+  useEffect(() => {
+    if (id) fetchPost();
   }, [id]);
 
   const fetchPost = async () => {
     try {
       const res = await api.get(`/posts/my-posts`);
       const post = res.data.data.find(p => p._id === id);
-      
       if (post && post.status === 'pending') {
         setFormData({
           opportunity: post.opportunity,
@@ -46,11 +45,10 @@ const CreatePost = () => {
     }
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       if (id) {
         await api.put(`/posts/${id}`, formData);
@@ -65,7 +63,25 @@ const CreatePost = () => {
     }
   };
 
-   return (
+  
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ color: [] }, { background: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'blockquote', 'code-block'],
+      ['clean']
+    ],
+  };
+
+  const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'color', 'background', 'list', 'bullet',
+    'link', 'blockquote', 'code-block'
+  ];
+
+  return (
     <div className="max-w-3xl mx-auto">
       <div className="bg-gray-800/50 backdrop-blur rounded-2xl p-8 border border-gray-700">
         <h1 className="text-3xl font-bold mb-6">
@@ -77,7 +93,7 @@ const CreatePost = () => {
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm mb-2 font-semibold">Opportunity Title *</label>
@@ -85,7 +101,7 @@ const CreatePost = () => {
               type="text"
               required
               value={formData.opportunity}
-              onChange={(e) => setFormData({...formData, opportunity: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, opportunity: e.target.value })}
               placeholder="Scholarship Program name"
               className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-white"
             />
@@ -98,7 +114,7 @@ const CreatePost = () => {
                 type="text"
                 required
                 value={formData.country}
-                onChange={(e) => setFormData({...formData, country: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                 placeholder="e.g., United States"
                 className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-white"
               />
@@ -109,7 +125,7 @@ const CreatePost = () => {
               <select
                 required
                 value={formData.fundingType}
-                onChange={(e) => setFormData({...formData, fundingType: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, fundingType: e.target.value })}
                 className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-white"
               >
                 <option value="">Select...</option>
@@ -127,7 +143,7 @@ const CreatePost = () => {
                 type="date"
                 required
                 value={formData.deadline}
-                onChange={(e) => setFormData({...formData, deadline: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
                 className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-white"
               />
             </div>
@@ -137,21 +153,23 @@ const CreatePost = () => {
               <input
                 type="url"
                 value={formData.officialLink}
-                onChange={(e) => setFormData({...formData, officialLink: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, officialLink: e.target.value })}
                 placeholder="https://..."
                 className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-white"
               />
             </div>
           </div>
 
+          {/*  React Quill Editor instead of Textarea */}
           <div>
             <label className="block text-sm mb-2 font-semibold">Description</label>
-            <textarea
+            <ReactQuill
+              theme="snow"
+              modules={modules}
+              formats={formats}
               value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              rows="5"
-              placeholder="Provide details about the opportunity..."
-              className="w-full px-4 py-3 bg-gray-900/50 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none text-white"
+              onChange={(value) => setFormData({ ...formData, description: value })}
+              className="bg-gray-900/50 text-white rounded-lg border border-gray-600"
             />
           </div>
 
@@ -185,8 +203,3 @@ const CreatePost = () => {
 };
 
 export default CreatePost;
-
-
-
-
-

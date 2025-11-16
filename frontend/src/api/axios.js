@@ -7,15 +7,16 @@ const api = axios.create({
   },
 });
 
-// Response interceptor to handle token errors
+// Add token to requests
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const { status, data } = error.response;
-      const message = data?.message || '';
+      const status = error.response.status;
+      const message = error.response.data?.message || '';
 
-      if (status === 401 && message.toLowerCase().includes('token')) {
+      //  Redirect only if token invalid or expired
+      if (status === 401 && message.includes('token')) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';

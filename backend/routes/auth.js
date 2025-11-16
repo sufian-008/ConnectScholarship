@@ -10,7 +10,6 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
-// ✅ Helper: Handle server errors nicely
 const handleServerError = (res, error) => {
   console.error('Server Error:', error.message);
   return res.status(500).json({
@@ -76,7 +75,7 @@ router.post(
 
 // ===============================
 // @route   POST /api/auth/login
-// ===============================
+
 router.post(
   '/login',
   [
