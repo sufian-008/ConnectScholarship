@@ -3,6 +3,50 @@
 A comprehensive **full-stack scholarship platform** built with **Node.js, Express, MongoDB, React, Vite, Tailwind**, and an **AI-powered chatbot**. This platform includes separate apps for users and admin, complete CRUD functionality, JWT authentication, and smart search capabilities.
 
 
+# Connect Scholarship Portal 🚀
+
+Excited to share my latest project: **Opportunity Portal**!  
+
+I’ve built a **full-stack platform** to manage and track global opportunities and funding posts.  
+
+---
+
+## Features
+
+- ✅ **Post Management**: Create, approve, and track opportunities  
+- ✅ **Subscriber System**: Users get email updates for new posts  
+- ✅ **Role-based Users**: Admins and regular users with secure authentication  
+- ✅ **Analytics Dashboard**: Built in **Metabase** with KPIs, charts, and automated daily/weekly email reports  
+
+---
+
+## Tech Stack
+
+- **Backend**: Node.js, Express  
+- **Database**: MongoDB  
+- **Frontend**: React.js  
+- **Analytics**: Metabase  
+
+---
+
+## Learning Outcomes
+
+This project helped me practice:
+
+- Backend development and API design  
+- Database modeling and management  
+- Data analytics and dashboard creation  
+
+---
+
+## Screenshot
+
+- Metabase Dashboard (screenshot o: <img width="1058" height="818" alt="image" src="https://github.com/user-attachments/assets/9111c292-2cc5-4855-974a-ca41d7021a9b" />
+ 
+
+---
+
+*This project showcases my ability to build end-to-end web applications with real-world features, including analytics and automated reporting.*
 
 ### 🚀 Quick Start
 
